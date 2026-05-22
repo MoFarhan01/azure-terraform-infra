@@ -1,0 +1,12 @@
+# Terraform state files - never commit these
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+
+# Sensitive variables - never commit these
+*.tfvars
+
+# OS files
+.DS_Store
+Thumbs.db
