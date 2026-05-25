@@ -4,13 +4,16 @@
 Production-grade Azure infrastructure provisioned entirely with Terraform IaC. Demonstrates real-world cloud engineering practices including remote state management, modular configuration, network security, and GitOps principles.
 
 ## Architecture
+
+```
 Resource Group (farhan-cloud-rg)
 ├── Virtual Network (10.0.0.0/16)
 │   └── Subnet (10.0.1.0/24)
-│       └── NSG (SSH inbound rule)
+│       └── Network Security Group (SSH inbound)
 ├── Public IP (Static, Standard SKU)
 ├── Network Interface
 └── Linux Virtual Machine (Ubuntu 18.04 LTS)
+```
 
 ## Infrastructure Components
 | Resource | Name | Purpose |
