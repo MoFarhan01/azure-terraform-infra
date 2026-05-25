@@ -1,4 +1,4 @@
-variable "location" {
+﻿variable "location" {
   description = "Azure region where resources will be deployed"
   type        = string
   default     = "West Europe"
@@ -19,7 +19,7 @@ variable "environment" {
 variable "vm_size" {
   description = "Size of the virtual machine"
   type        = string
-  default     = "Standard_B1s"
+  default     = "Standard_D2s_v3"
 }
 
 variable "admin_username" {
