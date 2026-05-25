@@ -1,60 +1,91 @@
-﻿# Azure Cloud Infrastructure with Terraform
+# Azure Cloud Infrastructure with Terraform
 
 ## Overview
-Production-grade Azure infrastructure provisioned entirely with Terraform IaC. Demonstrates real-world cloud engineering practices including remote state management, modular configuration, network security, and GitOps principles.
+
+Production-grade Azure infrastructure built with Terraform. Covers remote state management, network security, modular variables, and GitOps principles.
 
 ## Architecture
+
 Resource Group (farhan-cloud-rg)
 ├── Virtual Network (10.0.0.0/16)
 │   └── Subnet (10.0.1.0/24)
-│       └── NSG (SSH inbound rule)
+│       └── Network Security Group (SSH inbound)
 ├── Public IP (Static, Standard SKU)
 ├── Network Interface
 └── Linux Virtual Machine (Ubuntu 18.04 LTS)
 
-## Infrastructure Components
-| Resource | Name | Purpose |
-|----------|------|---------|
-| Resource Group | farhan-cloud-rg | Logical container for all resources |
-| Virtual Network | farhan-vnet | Isolated network environment |
-| Subnet | farhan-subnet | Network segment for compute resources |
-| Network Security Group | farhan-nsg | Inbound/outbound traffic control |
-| Public IP | farhan-public-ip | Static external IP (Standard SKU) |
-| Network Interface | farhan-nic | VM network identity |
-| Linux VM | farhan-vm | Ubuntu 18.04 LTS compute instance |
+## Resources
 
-## Key Engineering Decisions
-- Remote State — Terraform state stored in Azure Blob Storage with state locking to prevent concurrent apply conflicts
-- Standard SKU Public IP — Used over Basic SKU which is being retired by Azure
-- Static IP Allocation — Ensures consistent external addressing for DNS and firewall rules
-- Pessimistic Version Constraints — ~> 3.0 prevents accidental breaking major version upgrades
-- Sensitive Variables — Admin password marked sensitive so it never appears in logs or pipeline output
-- Tagged Resources — All resources tagged with environment and managed_by for cost tracking and drift prevention
+| Resource | Name |
+|----------|------|
+| Resource Group | farhan-cloud-rg |
+| Virtual Network | farhan-vnet |
+| Subnet | farhan-subnet |
+| Network Security Group | farhan-nsg |
+| Public IP | farhan-public-ip |
+| Network Interface | farhan-nic |
+| Virtual Machine | farhan-vm |
+
+## Engineering Decisions
+
+- **Remote state** stored in Azure Blob Storage with state locking — prevents concurrent apply conflicts in team environments
+- **Standard SKU** used for Public IP — Basic SKU is being retired by Azure
+- **Static IP allocation** — consistent external address for DNS and firewall rules
+- **Pessimistic version constraint** (~> 3.0) — allows minor updates, blocks breaking major version jumps
+- **Sensitive variables** — admin password never appears in logs or pipeline output
+- **Environment tags** — all resources tagged for cost tracking, RBAC scoping, and safe cleanup
 
 ## Prerequisites
+
 - Terraform >= 1.0
 - Azure CLI
 - Active Azure subscription
-- Azure Blob Storage for remote state
 
 ## Backend Setup
-Create remote state storage before initialising Terraform:
 
+Run once before terraform init:
+
+```bash
 az group create --name tfstate-rg --location westeurope
-az storage account create --name tfstatefarhan01 --resource-group tfstate-rg --location westeurope --sku Standard_LRS
-az storage container create --name tfstate --account-name tfstatefarhan01
+
+az storage account create \
+  --name tfstatefarhan01 \
+  --resource-group tfstate-rg \
+  --location westeurope \
+  --sku Standard_LRS
+
+az storage container create \
+  --name tfstate \
+  --account-name tfstatefarhan01
+```
 
 ## Deployment
 
+```bash
 terraform init
 terraform plan
 terraform apply
 terraform destroy
+```
+
+## Screenshots
+
+### Live VM via SSH
+![SSH Session](screenshots/ssh-session.png)
+
+### Azure Portal — Resources
+![Azure Portal](screenshots/azure-portal.png)
+
+### Terraform Outputs
+![Outputs](screenshots/terraform-outputs.png)
 
 ## Security Notes
-- SSH currently open to 0.0.0.0/0 — production would restrict to bastion host or VPN IP
-- Password authentication enabled for demo — production uses SSH keys only
-- TLS 1.2 minimum should be enforced on storage account in production
+
+- SSH rule currently allows 0.0.0.0/0 — production should restrict to bastion host or VPN IP
+- Password authentication enabled for demo purposes — production uses SSH keys only
+- Storage account should enforce TLS 1.2 minimum in production
 
 ## Author
-Mohammed Farhan Ali — Cloud Engineer
+
+Mohammed Farhan Ali — Cloud Engineer  
+[LinkedIn](https://linkedin.com/in/mohammed-farhan-ali)
