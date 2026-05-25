@@ -61,4 +61,4 @@ terraform destroy
 
 ## Author
 Mohammed Farhan Ali — Cloud Engineer
-[LinkedIn](https://linkedin.com/in/mohammed-farhan-ali)
+[LinkedIn](https://www.linkedin.com/in/mohammedfarhan1/)
