@@ -3,21 +3,21 @@ terraform {
 
   required_providers {
     azurerm = {
-        source = "hashicorp/azurerm"
-        version = "~> 3.0"
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
     }
   }
 
   backend "azurerm" {
-    resource_group_name = "tfstate-rg"
+    resource_group_name  = "tfstate-rg"
     storage_account_name = "tfstatefarhan01"
-    container_name = "tfstate"
-    key = "azure-infra.tfstate"
-    
+    container_name       = "tfstate"
+    key                  = "azure-infra.tfstate"
+
   }
 
 }
 
 provider "azurerm" {
-  features {}         
+  features {}
 }
